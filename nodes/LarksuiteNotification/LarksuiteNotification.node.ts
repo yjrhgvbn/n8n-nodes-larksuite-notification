@@ -152,7 +152,7 @@ export class LarksuiteNotification implements INodeType {
 			if (messageType === 'pine') {
 				await pinMessage(client, sendRes.data?.message_id);
 			}
-			return [sendRes];
+			return [[{json:sendRes}]];
 		} else if (matchedRobot.type === 'bot') {
 			if (imageList.length > 0) {
 				const client = new lark.Client({
@@ -177,8 +177,8 @@ export class LarksuiteNotification implements INodeType {
 					card: {
 						type: 'template',
 						data: {
-							template_id: 'AAqIg4QaSZNwV',
-							template_version_name: '1.0.1',
+							template_id: matchedCard.id,
+							template_version_name: matchedCard.version,
 							template_variable: variables,
 						},
 					},
@@ -188,7 +188,7 @@ export class LarksuiteNotification implements INodeType {
 			if (data.code !== 0) {
 				throw new NodeOperationError(this.getNode(), `Error sending message: ${data.msg}`);
 			}
-			return [data];
+			return [[{json:data}]];
 		} else {
 			throw new NodeOperationError(this.getNode(), `Unsupported robot type: ${matchedRobot.type}`);
 		}
